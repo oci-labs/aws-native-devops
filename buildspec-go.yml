@@ -22,6 +22,8 @@ phases:
       
       # Print all environment variables (handy for AWS CodeBuild logs)
       - env
+      - echo GOPATH - $GOPATH
+      - echo GOROOT - $GOROOT
 
       # Install golint
       #- go get -t github.com/golang/lint/golint
