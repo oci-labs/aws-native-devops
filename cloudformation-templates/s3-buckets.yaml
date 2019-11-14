@@ -1,0 +1,97 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description:  AWS Native DevOps S3 Buckets
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+      - Label:
+          default: 'Environment'
+        Parameters:
+          - Environment
+Parameters:
+  Environment:
+    Description: 'Environment'
+    Type: String
+    AllowedValues:
+      - dev
+      - sbx
+      - test
+Resources:
+  BeanstalkDeploymentBucket:
+    Type:  AWS::S3::Bucket
+    Properties:
+      AccessControl:  Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      BucketName: !Join
+      - '-'
+      - - 'oci-cloudops-beanstalk-deployment-bucket'
+        - !Ref Environment
+      Tags:
+        - Key: Team
+          Value: OCI Cloud Operations
+        - Key: Application
+          Value: Cloud Operations Native DevOps POC
+        - Key: Purpose
+          Value: Demo Application Deployment Bucket
+      VersioningConfiguration:
+        Status:  Enabled
+  InfrastructureBucket:
+    Type:  AWS::S3::Bucket
+    Properties:
+      AccessControl:  Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      BucketName: !Join
+        - '-'
+        - - 'oci-cloudops-infrastructure-bucket'
+          - !Ref Environment
+      Tags:
+        - Key: Team
+          Value: OCI Cloud Operations
+        - Key: Application
+          Value: Cloud Operations Native DevOps POC
+        - Key: Purpose
+          Value: Demo Application Infrastructure Bucket
+      VersioningConfiguration:
+        Status:  Enabled
+  LambdaDeploymentBucket:
+    Type:  AWS::S3::Bucket
+    Properties:
+      AccessControl:  Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      BucketName: !Join
+        - '-'
+        - - 'oci-cloudops-lambda-deployment-bucket'
+          - !Ref Environment
+      Tags:
+        - Key: Team
+          Value: OCI Cloud Operations
+        - Key: Application
+          Value: Cloud Operations Native DevOps POC
+        - Key: Purpose
+          Value: Demo Application Lambda Deployment Bucket
+      VersioningConfiguration:
+        Status: Enabled
+Outputs:
+  InfrastructureBucket:
+    Description:  Private S3 Bucket for storing infrastructure scripts
+    Value:  !Ref InfrastructureBucket
+    Export:
+      Name: OCIInfrastructureBucket
+  BeanstalkDeployBucket:
+    Description: Private S3 Bucket for Elastic Beanstalk deployments
+    Value: !Ref BeanstalkDeploymentBucket
+    Export:
+      Name: OCIBeanstalkDeploymentBucket
+  LambdaDeployBucket:
+    Description: Private S3 Bucket for Lambda deploymennts
+    Value: !Ref LambdaDeploymentBucket
+    Export:
+      Name: OCILambdaDeploymentBucket
