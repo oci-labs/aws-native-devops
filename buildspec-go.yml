@@ -6,7 +6,7 @@ env:
     # Make sure to provide a valid S3 bucket name (it must exist already).
     # The AWS CodeBuild IAM role must allow write access to it.
     S3_BUCKET: "oci-cloudops-lambda-deployment-bucket-dev"
-    PACKAGE: "github.com/oci-labs/aws-native-devops/cloud-native-go"
+    PACKAGE: "github.com/oci-labs/aws-native-devops/cloud-native-golang-demo"
 
 phases:
 
