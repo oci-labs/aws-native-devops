@@ -18,15 +18,15 @@ phases:
       # AWS Codebuild Go images use /go for the $GOPATH so let's copy our 
       # application source code into that directory structure.
       - mkdir -p "/go/src/$(dirname ${PACKAGE})"
+      - echo "${CODEBUILD_SRC_DIR}"
       - ln -s "${CODEBUILD_SRC_DIR}" "/go/src/${PACKAGE}" 
       
       # Print all environment variables (handy for AWS CodeBuild logs)
       - env
       - echo GOPATH - $GOPATH
-      - echo GOROOT - $GOROOT
 
       # Install golint
-      #- go get -t github.com/golang/lint/golint
+      - go get -t github.com/golang/lint/golint
 
   pre_build: 
     commands:
@@ -38,7 +38,7 @@ phases:
       - go get -t ./...
 
       # Ensure code passes all lint tests
-      #- golint -set_exit_status
+      - golint -set_exit_status
 
       # Check the Go code for common problems with 'go vet'
       - go vet .
